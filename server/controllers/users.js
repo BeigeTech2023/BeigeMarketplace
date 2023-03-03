@@ -1,5 +1,5 @@
 const User = require("../models/User");
-
+const ErrorResponse = require("../utils/errorResponse");
 // @Desc    Get all users
 // @route   GET api/v1/users
 // @Access  Public
@@ -27,16 +27,23 @@ exports.getUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) {
-      return res
-        .status(400)
-        .json({ success: false, msg: "User does not exist" });
+      req.role = req.params.id;
+      const err = new ErrorResponse(
+        `Cannot find user`,
+        404,
+        "CastError",
+        req.params.id
+      );
+      return next(err);
     }
     res.status(200).json({
       success: true,
       data: `You are getting this user ${req.params.id}`,
     });
   } catch (err) {
-    res.status(400).json({ success: false, data: err });
+    //return res.status(404).json({ err: err });
+    req.role = req.params.id;
+    next(err);
   }
 };
 

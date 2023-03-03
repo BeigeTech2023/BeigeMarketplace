@@ -4,6 +4,7 @@ const connectDB = require("./config/db");
 // Bring in route files
 const users = require("./routes/users");
 const auth = require("./routes/auth");
+const errorHandler = require("./middleware/errorHandling");
 // Load config file
 dotenv.config({ path: "./config/config.env" });
 connectDB();
@@ -15,6 +16,7 @@ app.use(express.json());
 // Mount routers
 app.use("/api/v1/users", users);
 app.use("/api/v1/auth", auth);
+app.use(errorHandler);
 const PORT = process.env.PORT;
 const ENV = process.env.NODE_ENV;
 app.listen(
