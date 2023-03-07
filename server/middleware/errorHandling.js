@@ -11,7 +11,7 @@ const errorHandler = (err, req, res, next) => {
   }
   console.log(error);
   // mongoose validation
-  if ((error.name = "VlaidationError")) {
+  if ((error.name = "ValidationError")) {
     error = new ErrorResponse(error.message, 400, error.name, "none");
   }
 
@@ -26,6 +26,8 @@ const errorHandler = (err, req, res, next) => {
     statusCode: error.statusCode,
     type: error.name,
   });
+  console.log("going through this");
+  next();
 };
 
 module.exports = errorHandler;
