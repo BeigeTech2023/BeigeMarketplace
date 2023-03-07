@@ -65,6 +65,7 @@ exports.userLogin = async (req, res, next) => {
   }
 };
 
+// create cookies with token
 const sendTokensInCookies = (user, statuscode, res) => {
   const token = user.getSignedJwtToken();
   const options = {
