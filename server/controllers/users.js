@@ -27,7 +27,6 @@ exports.getUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) {
-      req.role = req.params.id;
       const err = new ErrorResponse(
         `Cannot find user`,
         404,
@@ -41,8 +40,6 @@ exports.getUser = async (req, res, next) => {
       data: `You are getting this user ${req.params.id}`,
     });
   } catch (err) {
-    //return res.status(404).json({ err: err });
-    req.role = req.params.id;
     next(err);
   }
 };
@@ -58,7 +55,8 @@ exports.createUser = async (req, res, next) => {
       data: user,
     });
   } catch (err) {
-    res.status(400).json({ success: false, data: err });
+    console.log(err);
+    next(err);
   }
 };
 
@@ -76,16 +74,20 @@ exports.updateUser = async (req, res, next) => {
       }
     );
     if (!user) {
-      return res
-        .status(400)
-        .json({ success: false, msg: "User does not exist" });
+      const err = new ErrorResponse(
+        `Cannot find user`,
+        404,
+        "CastError",
+        req.params.id
+      );
+      return next(err);
     }
     res.status(200).json({
       success: true,
       data: user,
     });
   } catch (err) {
-    res.status(400).json({ success: false, data: err });
+    next(err);
   }
 };
 
@@ -96,15 +98,19 @@ exports.deleteUser = async (req, res, next) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
     if (!user) {
-      return res
-        .status(400)
-        .json({ success: false, msg: "User does not exist" });
+      const err = new ErrorResponse(
+        `Cannot find user`,
+        404,
+        "CastError",
+        req.params.id
+      );
+      return next(err);
     }
     res.status(200).json({
       success: true,
       data: {},
     });
   } catch (err) {
-    res.status(400).json({ success: false, data: err });
+    next(err);
   }
 };

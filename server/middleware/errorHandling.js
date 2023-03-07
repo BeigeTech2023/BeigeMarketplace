@@ -9,6 +9,17 @@ const errorHandler = (err, req, res, next) => {
     const message = `User with id ${error.value} was not found`;
     error = new ErrorResponse(message, 404, error.name, error.value);
   }
+  console.log(error);
+  // mongoose validation
+  if ((error.name = "VlaidationError")) {
+    error = new ErrorResponse(error.message, 400, error.name, "none");
+  }
+
+  if (error.code === 11000) {
+    //mongoose duplicate key error
+    const message = "Duplicate field value entered";
+    error = new ErrorResponse(message, 400, error.name, "none");
+  }
   res.status(error.statusCode).json({
     success: false,
     error: error.message,
