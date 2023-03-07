@@ -4,6 +4,7 @@ const connectDB = require("./config/db");
 // Bring in route files
 const users = require("./routes/users");
 const auth = require("./routes/auth");
+const CookieParser = require("cookie-parser");
 const errorHandler = require("./middleware/errorHandling");
 // Load config file
 dotenv.config({ path: "./config/config.env" });
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use("/api/v1/users", users);
 app.use("/api/v1/auth", auth);
 app.use(errorHandler);
+app.use(CookieParser());
 const PORT = process.env.PORT;
 const ENV = process.env.NODE_ENV;
 app.listen(

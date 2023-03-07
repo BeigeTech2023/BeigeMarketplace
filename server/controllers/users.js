@@ -44,21 +44,21 @@ exports.getUser = async (req, res, next) => {
   }
 };
 
-// @Desc    Create a new user
-// @route   POST api/v1/users
-// @Access  Private
-exports.createUser = async (req, res, next) => {
-  try {
-    const user = await User.create(req.body);
-    res.status(201).json({
-      success: true,
-      data: user,
-    });
-  } catch (err) {
-    console.log(err);
-    next(err);
-  }
-};
+// // @Desc    Create a new user
+// // @route   POST api/v1/users
+// // @Access  Private
+// exports.createUser = async (req, res, next) => {
+//   try {
+//     const user = await User.create(req.body);
+//     res.status(201).json({
+//       success: true,
+//       data: user,
+//     });
+//   } catch (err) {
+//     console.log(err);
+//     next(err);
+//   }
+// };
 
 // @Desc    Update a specific user
 // @route   PUT api/v1/users/:id

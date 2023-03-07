@@ -13,12 +13,7 @@ exports.createUser = async (req, res, next) => {
       password,
       role,
     });
-    const token = user.getSignedJwtToken();
-    res.status(201).json({
-      success: true,
-      data: user,
-      token,
-    });
+    sendTokensInCookies(user, 200, res);
   } catch (err) {
     res.status(400).json({ success: false, data: err });
   }
@@ -64,13 +59,23 @@ exports.userLogin = async (req, res, next) => {
         )
       );
     }
-    const token = user.getSignedJwtToken();
-    res.status(201).json({
-      success: true,
-      data: "user has successfully logged in",
-      token,
-    });
+    sendTokensInCookies(user, 200, res);
   } catch (err) {
     next(err);
   }
+};
+
+const sendTokensInCookies = (user, statuscode, res) => {
+  const token = user.getSignedJwtToken();
+  const options = {
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
+    ),
+    httpOnly: true,
+  };
+
+  res.status(statuscode).cookie("token", token, options).json({
+    success: true,
+    token,
+  });
 };
