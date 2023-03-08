@@ -15,7 +15,7 @@ exports.createUser = async (req, res, next) => {
     });
     sendTokensInCookies(user, 200, res);
   } catch (err) {
-    res.status(400).json({ success: false, data: err });
+    next(err);
   }
 };
 
